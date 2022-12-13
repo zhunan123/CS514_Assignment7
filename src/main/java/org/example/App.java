@@ -1,9 +1,24 @@
 package org.example;
 
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import java.io.BufferedReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.Random;
 
 public class App {
 
@@ -47,7 +62,7 @@ public class App {
         pw = br.readLine();
         System.out.println(
                 "*****************************************************************" + "\n" +
-                        "************" + ANSI_PURPLE + "" + username.toUpperCase() + "" + ANSI_RESET + "Welcome Back to Music Manager******************" + "\n" +
+                        "************" + ANSI_PURPLE + "" + username.toUpperCase() + " " + ANSI_RESET + "Welcome Back to Music Manager******************" + "\n" +
                         "*****************************************************************" + "\n" +
                         "*******" + ANSI_CYAN + "Press 1 to see all the songs/albums/artists available in the song store" + ANSI_RESET + "********" + "\n" +
                         "*******" + ANSI_GREEN + "Press 2 to generate the playlist in XML files and play all the songs" + ANSI_RESET + "********" + "\n" +
@@ -58,6 +73,18 @@ public class App {
         String s1 = null;
         try {
           s1 = br.readLine();
+          if (s1.equals("1")) {
+            System.out.println("********Below is all the songs available*********");
+            displayAllSongs();
+            System.out.println("********Below is all the albums available*********");
+            displayAllAlbums();
+            System.out.println("********Below is all the artists available*********");
+            displayAllArtists();
+          }
+
+          if (s1.equals("2")) {
+            generatePlaylist();
+          }
           if (s1.equals("3")) {
             System.out.println(
                     "************How Do you want to search for songs?***********" + "\n" +
@@ -76,6 +103,102 @@ public class App {
     }
   }
 
+  private static void generatePlaylist() {
+    Playlist playlist = new Playlist();
+
+    Connection connection = null;
+    try {
+      connection = DriverManager.getConnection("jdbc:sqlite:musicManager.db");
+      Statement statement = connection.createStatement();
+      ResultSet rs = statement.executeQuery("select * from songs");
+
+      while (rs.next()){
+        try {
+          String name = rs.getString("name");
+          String albumname = rs.getString("album");
+          String artistname = rs.getString("artist");
+          int nLikes = new Random(). nextInt(100);
+
+          Song song = new Song();
+          Album album = new Album(albumname);
+          Artist artist = new Artist(artistname);
+
+          song.setTitle(name);
+          song.setAlbum(album);
+          song.setPerformer(artist);
+          song.setLikes(nLikes);
+
+          playlist.addSong(song);
+          playlist.sort();
+          writeToXML(playlist);
+
+        } catch(SQLException e) {
+          System.out.println("SQL Exception" + e.getMessage());
+        }
+      }
+    } catch (SQLException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  private static void writeToXML(Playlist pl) {
+    try {
+      DocumentBuilderFactory db = DocumentBuilderFactory.newInstance();
+      DocumentBuilder build = db.newDocumentBuilder();
+      Document doc = build.newDocument();
+
+      Element root = doc.createElement("playlist");
+      doc.appendChild(root);
+
+      Element songs = doc.createElement("songs");
+      root.appendChild(songs);
+
+      ArrayList<Song> list = pl.songlist;
+      for (Song s : list) {
+        Element song = doc.createElement("song");
+        songs.appendChild(song);
+
+        Element title = doc.createElement("title");
+        title.appendChild(doc.createTextNode(String.valueOf(s.getTitle())));
+        song.appendChild(title);
+
+        Element artist = doc.createElement("artist");
+        artist.appendChild(doc.createTextNode(String.valueOf(s.getPerformer())));
+        song.appendChild(artist);
+
+        Element album = doc.createElement("album");
+        album.appendChild(doc.createTextNode(String.valueOf(s.getAlbum())));
+        song.appendChild(album);
+
+        Element likes = doc.createElement("likes");
+        likes.appendChild(doc.createTextNode(String.valueOf(s.getLikes())));
+        song.appendChild(likes);
+      }
+
+      TransformerFactory tranFactory = TransformerFactory.newInstance();
+      Transformer tf = tranFactory.newTransformer();
+
+      tf.setOutputProperty(OutputKeys.ENCODING, "ISO-8859-1");
+      tf.setOutputProperty(
+              "{http://xml.apache.org/xslt}indent-amount", "4");
+      tf.setOutputProperty(OutputKeys.INDENT, "yes");
+
+      DOMSource sc = new DOMSource(doc);
+      try {
+        FileWriter fos = new FileWriter("././././outputPlaylist.xml");
+        StreamResult result = new StreamResult(fos);
+        tf.transform(sc, result);
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+
+    } catch (TransformerException ex) {
+      System.out.println("Error outputting document");
+    } catch (ParserConfigurationException ex) {
+      System.out.println("Error building document");
+    }
+  }
+
   private static Integer getPreviousTableID(String tableName) {
     Connection connection = null;
     String dbName = "musicManager.db";
@@ -91,6 +214,75 @@ public class App {
       System.err.println(e.getMessage());
     }
     return ID;
+  }
+
+  public static void displayAllSongs() {
+    Connection connection = null;
+    try {
+      connection = DriverManager.getConnection("jdbc:sqlite:musicManager.db");
+      Statement statement = connection.createStatement();
+      ResultSet rs = statement.executeQuery("select * from songs");
+
+      while (rs.next()){
+        try {
+          ID = rs.getInt("id");
+          String name = rs.getString("name");
+          System.out.println(
+                  "["+ ID + "] "+ name + ""
+          );
+        } catch(SQLException e) {
+          System.out.println("SQL Exception" + e.getMessage());
+        }
+      }
+    } catch (SQLException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  public static void displayAllAlbums() {
+    Connection connection = null;
+    try {
+      connection = DriverManager.getConnection("jdbc:sqlite:musicManager.db");
+      Statement statement = connection.createStatement();
+      ResultSet rs = statement.executeQuery("select * from albums");
+
+      while (rs.next()){
+        try {
+          ID = rs.getInt("id");
+          String name = rs.getString("name");
+          System.out.println(
+                  "["+ ID + "] "+ name + ""
+          );
+        } catch(SQLException e) {
+          System.out.println("SQL Exception" + e.getMessage());
+        }
+      }
+    } catch (SQLException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  public static void displayAllArtists() {
+    Connection connection = null;
+    try {
+      connection = DriverManager.getConnection("jdbc:sqlite:musicManager.db");
+      Statement statement = connection.createStatement();
+      ResultSet rs = statement.executeQuery("select * from artists");
+
+      while (rs.next()){
+        try {
+          ID = rs.getInt("id");
+          String name = rs.getString("name");
+          System.out.println(
+                  "["+ ID + "] "+ name + ""
+          );
+        } catch(SQLException e) {
+          System.out.println("SQL Exception" + e.getMessage());
+        }
+      }
+    } catch (SQLException e) {
+      throw new RuntimeException(e);
+    }
   }
 
   public static void connectToDB(String sql) {
