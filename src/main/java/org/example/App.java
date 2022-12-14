@@ -1,5 +1,9 @@
 package org.example;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -12,13 +16,15 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-import java.io.BufferedReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.Scanner;
 
 public class App {
 
@@ -90,9 +96,41 @@ public class App {
                     "************How Do you want to search for songs?***********" + "\n" +
                             "[1] Artist's name" + "\n" +
                             "[2] Song's title" + "\n" +
-                            "[3] Album's name" + "\n" +
-                            ">> Please Enter your response: "
+                            "[3] Album's name" + "\n"
             );
+            System.out.print(">> Please Enter your response: ");
+            String s2 = null;
+            try {
+              s2 = br.readLine();
+              if (s2.equals("1")){
+                System.out.println(
+                        "***************Those are the available artists, if not please enter other artist's name***************"
+                );
+                displayAllArtists();
+                System.out.print(">> Please Enter the artist name you want to search: ");
+                String s3 = br.readLine();
+                //say s3 = taylor swift then we just audio DB to get response back and console the output in the terminal
+                //then user can slect songs according to artist name then you can ask to play them then add songs into playlist
+                //if user want
+                searchAllAlbums(s3);
+              }
+              if (s2.equals("2")){
+                System.out.println(
+                        "***************Those are the available songs, if not please enter other song's name***************"
+                );
+                displayAllSongs();
+                System.out.print(">> Please Enter the song's name you want to search...");
+              }
+              if (s2.equals("3")){
+                System.out.println(
+                        "***************Those are the available albums, if not please enter other album's name***************"
+                );
+                displayAllAlbums();
+                System.out.print(">> Please Enter the album's name you want to search...");
+              }
+            } catch (IOException e) {
+              throw new RuntimeException(e);
+            }
           }
         } catch (IOException e) {
           throw new RuntimeException(e);
@@ -100,6 +138,52 @@ public class App {
       }
     } catch (IOException e) {
       throw new RuntimeException(e);
+    }
+  }
+
+  private static void searchAllAlbums(String artistName) {
+    String requestURL = "https://www.theaudiodb.com/api/v1/json/2/discography.php?s=";
+    String artist = artistName;
+    StringBuilder response = new StringBuilder();
+    URL u;
+    try {
+      u = new URL(requestURL + artistName);
+    } catch (MalformedURLException e) {
+      System.out.println("Malformed URL");
+      return;
+    }
+    try {
+      URLConnection connection = u.openConnection();
+      HttpURLConnection httpConnection = (HttpURLConnection) connection;
+      int code = httpConnection.getResponseCode();
+
+      String message = httpConnection.getResponseMessage();
+      System.out.println(code + " " + message);
+      if (code != HttpURLConnection.HTTP_OK) {
+        return;
+      }
+      InputStream instream = connection.getInputStream();
+      Scanner in = new Scanner(instream);
+      while (in.hasNextLine()) {
+        response.append(in.nextLine());
+      }
+    } catch (IOException e) {
+      System.out.println("Error reading response");
+      return;
+    }
+    try {
+      JSONParser parser = new JSONParser();
+      Object obj = parser.parse(response.toString());
+      JSONObject jsonObject = (JSONObject) obj;
+      JSONArray artists = (JSONArray)jsonObject.get("album");
+      System.out.println("***********Below are all available albums related to "+ artistName +" ***********");
+      for (int i = 1; i < artists.size(); i++) {
+        JSONObject album = (JSONObject) artists.get(i);
+        System.out.println(" ["+ i +"] "+ album.get("strAlbum") +" ");
+      }
+    } catch(ParseException e) {
+      System.out.println("Error parsing JSON");
+      return;
     }
   }
 
