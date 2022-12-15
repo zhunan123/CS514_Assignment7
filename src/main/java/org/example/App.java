@@ -22,9 +22,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.Random;
-import java.util.Scanner;
+import java.util.*;
 
 public class App {
 
@@ -109,9 +107,6 @@ public class App {
                 displayAllArtists();
                 System.out.print(">> Please Enter the artist name you want to search: ");
                 String s3 = br.readLine();
-                //say s3 = taylor swift then we just audio DB to get response back and console the output in the terminal
-                //then user can slect songs according to artist name then you can ask to play them then add songs into playlist
-                //if user want
                 searchAllAlbums(s3);
               }
               if (s2.equals("2")){
@@ -119,7 +114,12 @@ public class App {
                         "***************Those are the available songs, if not please enter other song's name***************"
                 );
                 displayAllSongs();
-                System.out.print(">> Please Enter the song's name you want to search...");
+                System.out.print(">> Please Enter the artist's name you want to search...");
+                //say s3 = taylor swift then we just audio DB to get response back and console the output in the terminal
+                //then user can slect songs according to artist name then you can ask to play them then add songs into playlist
+                //if user want
+                String s3 = br.readLine();
+                searchSongs(s3);
               }
               if (s2.equals("3")){
                 System.out.println(
@@ -138,6 +138,165 @@ public class App {
       }
     } catch (IOException e) {
       throw new RuntimeException(e);
+    }
+  }
+
+  public static void searchSongs(String artistName) {
+    String requestURL = "https://www.theaudiodb.com/api/v1/json/2/search.php?s=";
+    String artist = artistName;
+    StringBuilder response = new StringBuilder();
+    URL u;
+    try {
+      u = new URL(requestURL + artistName);
+    } catch (MalformedURLException e) {
+      System.out.println("Malformed URL");
+      return;
+    }
+
+    try {
+      URLConnection connection = u.openConnection();
+      HttpURLConnection httpConnection = (HttpURLConnection) connection;
+      int code = httpConnection.getResponseCode();
+
+      String message = httpConnection.getResponseMessage();
+      System.out.println(code + " " + message);
+      if (code != HttpURLConnection.HTTP_OK) {
+        return;
+      }
+      InputStream instream = connection.getInputStream();
+      Scanner in = new Scanner(instream);
+      while (in.hasNextLine()) {
+        response.append(in.nextLine());
+      }
+    } catch (IOException e) {
+      System.out.println("Error reading response");
+      return;
+    }
+
+    try {
+      //get Artist ID
+      JSONParser parser = new JSONParser();
+      Object obj = parser.parse(response.toString());
+      JSONObject jsonObject = (JSONObject) obj;
+      JSONArray artists = (JSONArray)jsonObject.get("artists");
+      JSONObject artistDetail = (JSONObject) artists.get(0);
+
+      String ArtistID = String.valueOf(artistDetail.get("idArtist"));
+
+      //get Album ID
+      String requestURL2 = "https://www.theaudiodb.com/api/v1/json/2/album.php?i=";
+      StringBuilder response2 = new StringBuilder();
+      URL u2;
+      try {
+        u2 = new URL(requestURL2 + ArtistID);
+      } catch (MalformedURLException e) {
+        System.out.println("Malformed URL");
+        return;
+      }
+
+      try {
+        URLConnection connection = u2.openConnection();
+        HttpURLConnection httpConnection = (HttpURLConnection) connection;
+        int code = httpConnection.getResponseCode();
+
+        String message = httpConnection.getResponseMessage();
+        System.out.println(code + " " + message);
+        if (code != HttpURLConnection.HTTP_OK) {
+          return;
+        }
+        InputStream instream = connection.getInputStream();
+        Scanner in = new Scanner(instream);
+        while (in.hasNextLine()) {
+          response2.append(in.nextLine());
+        }
+      } catch (IOException e) {
+        System.out.println("Error reading response");
+        return;
+      }
+      try {
+        Map<Integer, String> map2 = new HashMap<>();
+        //get albumID
+        JSONParser parser2 = new JSONParser();
+        Object obj2 = parser2.parse(response2.toString());
+        JSONObject jsonObject2 = (JSONObject) obj2;
+        JSONArray albums = (JSONArray)jsonObject2.get("album");
+
+        for (int i = 1; i < albums.size(); i++) {
+          JSONObject album = (JSONObject) albums.get(i);
+          map2.put(i, String.valueOf(album.get("idAlbum")));
+        }
+
+        //get Trackname
+        String requestURL3 = "https://www.theaudiodb.com/api/v1/json/2/track.php?m=";
+        StringBuilder response3 = new StringBuilder();
+        URL u3;
+        try {
+          for (int i = 1; i < map2.size(); i++) {
+            u3 = new URL(requestURL3 + map2.get(i));
+            try {
+              URLConnection connection = u3.openConnection();
+              HttpURLConnection httpConnection = (HttpURLConnection) connection;
+              int code = httpConnection.getResponseCode();
+
+              String message = httpConnection.getResponseMessage();
+              System.out.println(code + " " + message);
+              if (code != HttpURLConnection.HTTP_OK) {
+                return;
+              }
+              InputStream instream = connection.getInputStream();
+              Scanner in = new Scanner(instream);
+              while (in.hasNextLine()) {
+                response3.append(in.nextLine());
+              }
+            } catch (IOException e) {
+              System.out.println("Error reading response");
+              return;
+            }
+            try {
+              JSONParser parser3 = new JSONParser();
+              Object obj3 = parser3.parse(response3.toString());
+              JSONObject jsonObject3 = (JSONObject) obj3;
+              JSONArray tracks = (JSONArray)jsonObject3.get("track");
+              for (int j = 1; j < tracks.size(); j++) {
+                JSONObject track = (JSONObject) tracks.get(j);
+                System.out.println(" ["+ j +"] "+ track.get("strTrack") +" ");
+              }
+            } catch(ParseException e) {
+              System.out.println("Error parsing JSON");
+              return;
+            }
+          }
+        } catch (MalformedURLException e) {
+          System.out.println("Malformed URL");
+          return;
+        }
+
+        try {
+          URLConnection connection = u2.openConnection();
+          HttpURLConnection httpConnection = (HttpURLConnection) connection;
+          int code = httpConnection.getResponseCode();
+
+          String message = httpConnection.getResponseMessage();
+          System.out.println(code + " " + message);
+          if (code != HttpURLConnection.HTTP_OK) {
+            return;
+          }
+          InputStream instream = connection.getInputStream();
+          Scanner in = new Scanner(instream);
+          while (in.hasNextLine()) {
+            response2.append(in.nextLine());
+          }
+        } catch (IOException e) {
+          System.out.println("Error reading response");
+          return;
+        }
+      } catch(ParseException e) {
+        System.out.println("Error parsing JSON");
+        return;
+      }
+    } catch(ParseException e) {
+      System.out.println("Error parsing JSON");
+      return;
     }
   }
 
@@ -172,6 +331,7 @@ public class App {
       return;
     }
     try {
+      Map<Integer, String> map = new HashMap<>();
       JSONParser parser = new JSONParser();
       Object obj = parser.parse(response.toString());
       JSONObject jsonObject = (JSONObject) obj;
@@ -179,7 +339,37 @@ public class App {
       System.out.println("***********Below are all available albums related to "+ artistName +" ***********");
       for (int i = 1; i < artists.size(); i++) {
         JSONObject album = (JSONObject) artists.get(i);
+        map.put(i, String.valueOf(album.get("strAlbum")));
         System.out.println(" ["+ i +"] "+ album.get("strAlbum") +" ");
+      }
+      System.out.print(">> Please enter album number to see years created ");
+      BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+      String s5 = null;
+      try {
+        s5 = br.readLine();
+        for (int i = 1; i <= map.size(); i++) {
+          if (s5.equals("" + i + "")) {
+            JSONObject album = (JSONObject) artists.get(i);
+            System.out.println(""+ album.get("intYearReleased") +"");
+          }
+        }
+      } catch (IOException e) {
+        throw new RuntimeException(e);
+      }
+      System.out.print("Do You want to search for "+ artistName +"'s other songs?: (Y/N): ");
+      try {
+        String s6 = br.readLine();
+        if (s6.equals("Y")) {
+          System.out.print("Please enter artist's name you like to search: " );
+          try {
+            String s7 = br.readLine();
+            searchSongs(s7);
+          } catch (IOException e) {
+            throw new RuntimeException(e);
+          }
+        }
+      } catch (IOException e) {
+        throw new RuntimeException(e);
       }
     } catch(ParseException e) {
       System.out.println("Error parsing JSON");
