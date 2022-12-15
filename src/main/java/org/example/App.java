@@ -34,11 +34,11 @@ public class App {
 
   public static void startProgram() {
     System.out.println(
-            "*****************************************************************" + "\n" +
-                    "*************" + ANSI_PURPLE + "Welcome to Zhunan's Music Manager APP" + ANSI_RESET +"***************" + "\n" +
-                    "**********" + ANSI_GREEN + "If you are existed User, Please Press 1" + ANSI_RESET + "***********" + "\n" +
-                    "**********" + ANSI_CYAN + "If you are New User, Please Press 2" + ANSI_RESET + "***********" + "\n" +
-                    "*****************************************************************"
+            ":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::" + "\n" +
+                    ":::::::::::::::" + ANSI_PURPLE + "Welcome to Zhunan's Music Manager APP" + ANSI_RESET +":::::::::::::::::::" + "\n" +
+                    "::::::::::::::" + ANSI_GREEN + "If you are existed User, Please Press 1" + ANSI_RESET + "::::::::::::::::::" + "\n" +
+                    ":::::::::::::" + ANSI_CYAN + "If you are New User, Please Press 2" + ANSI_RESET + ":::::::::::::::::::::::" + "\n" +
+                    ":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::"
     );
 
     BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -65,75 +65,94 @@ public class App {
         System.out.print(">> Please Enter Your Password: ");
         pw = br.readLine();
         System.out.println(
-                "*****************************************************************" + "\n" +
-                        "************" + ANSI_PURPLE + "" + username.toUpperCase() + " " + ANSI_RESET + "Welcome Back to Music Manager******************" + "\n" +
-                        "*****************************************************************" + "\n" +
-                        "*******" + ANSI_CYAN + "Press 1 to see all the songs/albums/artists available in the song store" + ANSI_RESET + "********" + "\n" +
-                        "*******" + ANSI_GREEN + "Press 2 to generate the playlist in XML files and play all the songs" + ANSI_RESET + "********" + "\n" +
-                        "*******" + ANSI_CYAN + "Press 3 if you want to search new songs" + ANSI_RESET + "************"
+                ":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::" + "\n" +
+                        "::::::::::::::" + ANSI_PURPLE + "" + username.toUpperCase() + ", " + ANSI_RESET + "Welcome Back to Music Manager::::::::::::::::::::" + "\n" +
+                        ":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::" + "\n" +
+                        ":::::>>> " + ANSI_CYAN + "Press 1 to see all the songs/albums/artists available in the song store" + ANSI_RESET + "\n" +
+                        ":::::>>> " + ANSI_GREEN + "Press 2 to generate the playlist in XML files and play all the songs" + ANSI_RESET + "\n" +
+                        ":::::>>> " + ANSI_CYAN + "Press 3 if you want to search new songs" + ANSI_RESET
         );
         BufferedReader br1 = new BufferedReader(new InputStreamReader(System.in));
         System.out.print(">> ");
         String s1 = null;
         try {
-          s1 = br.readLine();
+          s1 = br1.readLine();
           if (s1.equals("1")) {
-            System.out.println("********Below is all the songs available*********");
+            System.out.println(":::::::::::::Below is all the songs available:::::::::::::");
             displayAllSongs();
-            System.out.println("********Below is all the albums available*********");
+            System.out.println(":::::::::::::Below is all the albums available:::::::::::::");
             displayAllAlbums();
-            System.out.println("********Below is all the artists available*********");
+            System.out.println(":::::::::::::Below is all the artists available:::::::::::::");
             displayAllArtists();
+            System.out.println(":::::::::::::What would you like to do next? Generate all songs we have in playList? Enter(Y/N): ");
+            System.out.print("> ");
+            String s2 = br1.readLine();
+            if (s2.equals("Y")) {
+              generatePlaylist();
+            }
+            System.out.println(":::::::::::::What would you like to do next? Do you want to search for other songs? Enter(Y/N): ");
+            System.out.print("> ");
+            String s3 = br1.readLine();
+            if (s3.equals("Y")) {
+              searchSongsInGeneral();
+            }
           }
 
           if (s1.equals("2")) {
             generatePlaylist();
           }
           if (s1.equals("3")) {
-            System.out.println(
-                    "************How Do you want to search for songs?***********" + "\n" +
-                            "[1] Artist's name" + "\n" +
-                            "[2] Song's title" + "\n" +
-                            "[3] Album's name" + "\n"
-            );
-            System.out.print(">> Please Enter your response: ");
-            String s2 = null;
-            try {
-              s2 = br.readLine();
-              if (s2.equals("1")){
-                System.out.println(
-                        "***************Those are the available artists, if not please enter other artist's name***************"
-                );
-                displayAllArtists();
-                System.out.print(">> Please Enter the artist name you want to search: ");
-                String s3 = br.readLine();
-                searchAllAlbums(s3);
-              }
-              if (s2.equals("2")){
-                System.out.println(
-                        "***************Those are the available songs, if not please enter other artist's name***************"
-                );
-                displayAllSongs();
-                System.out.println(">> Please Enter the artist's name you want to search: (Please in this case only use coldplay for testing since AudioDB API only support Coldplay testing to search for songs)");
-                System.out.print(">> ");
-                String s3 = br.readLine();
-                System.out.println("**********Below is the song list of "+ s3 +"*********");
-                searchSongs(s3);
-              }
-              if (s2.equals("3")){
-                System.out.println(
-                        "***************Those are the available albums, if not please enter other album's name***************"
-                );
-                displayAllAlbums();
-                System.out.print(">> Please Enter the album's name you want to search...");
-              }
-            } catch (IOException e) {
-              throw new RuntimeException(e);
-            }
+            searchSongsInGeneral();
           }
         } catch (IOException e) {
           throw new RuntimeException(e);
         }
+      }
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  public static void searchSongsInGeneral() {
+    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    System.out.println(
+            ":::::::::::::How Do you want to search for songs?:::::::::::::" + "\n" +
+                    "[1] Artist's name" + "\n" +
+                    "[2] Song's title" + "\n" +
+                    "[3] Album's name" + "\n"
+    );
+    System.out.print(">> Please Enter your response: ");
+    String s2 = null;
+    try {
+      s2 = br.readLine();
+      if (s2.equals("1")){
+        System.out.println(
+                ":::::::::::::Those are the available artists, if not please enter other artist's name:::::::::::::"
+        );
+        displayAllArtists();
+        System.out.print(">> Please Enter the artist name you want to search: ");
+        String s3 = br.readLine();
+        searchAllAlbums(s3);
+      }
+      if (s2.equals("2")){
+        System.out.println(
+                ":::::::::::::Those are the available songs, if not please enter other artist's name:::::::::::::"
+        );
+        displayAllSongs();
+        System.out.println(">> Please Enter the artist's name you want to search: (Please in this case only use coldplay for testing since AudioDB API only support Coldplay testing to search for songs)");
+        System.out.print(">> ");
+        String s3 = br.readLine();
+        System.out.println(":::::::::::::Below is the song list of "+ s3 +":::::::::::::");
+        searchSongs(s3);
+      }
+      if (s2.equals("3")){
+        System.out.println(
+                ":::::::::::::Those are the available albums, if not please enter other album's name:::::::::::::"
+        );
+        displayAllAlbums();
+        System.out.print(">> Please Enter the artist's name you want to search for albums: ");
+        String s3 = br.readLine();
+        searchAllAlbums(s3);
       }
     } catch (IOException e) {
       throw new RuntimeException(e);
@@ -262,7 +281,7 @@ public class App {
                 System.out.println(" ["+ j +"] "+ track.get("strTrack") +" ");
               }
 
-              System.out.println("********Which song you want to listen?**********");
+              System.out.println(":::::::::::::Which song you want to listen?:::::::::::::");
               BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
               String ans = null;
               try {
@@ -369,7 +388,7 @@ public class App {
       Object obj = parser.parse(response.toString());
       JSONObject jsonObject = (JSONObject) obj;
       JSONArray artists = (JSONArray)jsonObject.get("album");
-      System.out.println("***********Below are all available albums related to "+ artistName +" ***********");
+      System.out.println(":::::::::::::Below are all available albums related to "+ artistName +" :::::::::::::");
       for (int i = 1; i < artists.size(); i++) {
         JSONObject album = (JSONObject) artists.get(i);
         map.put(i, String.valueOf(album.get("strAlbum")));
@@ -397,7 +416,7 @@ public class App {
           System.out.print(">> ");
           try {
             String s7 = br.readLine();
-            System.out.println("**********Below is the song list of "+ s7 +"**************");
+            System.out.println(":::::::::::::Below is the song list of "+ s7 +":::::::::::::");
             System.out.println("You have successfully search for "+ s7 +"'s songs");
             searchSongs(s7);
           } catch (IOException e) {
