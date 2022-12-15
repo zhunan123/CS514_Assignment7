@@ -111,10 +111,10 @@ public class App {
               }
               if (s2.equals("2")){
                 System.out.println(
-                        "***************Those are the available songs, if not please enter other song's name***************"
+                        "***************Those are the available songs, if not please enter other artist's name***************"
                 );
                 displayAllSongs();
-                System.out.print(">> Please Enter the artist's name you want to search...");
+                System.out.println(">> Please Enter the artist's name you want to search: (Please in this case only use coldplay for testing since AudioDB API only support Coldplay testing to search for songs)");
                 //say s3 = taylor swift then we just audio DB to get response back and console the output in the terminal
                 //then user can slect songs according to artist name then you can ask to play them then add songs into playlist
                 //if user want
@@ -159,7 +159,6 @@ public class App {
       int code = httpConnection.getResponseCode();
 
       String message = httpConnection.getResponseMessage();
-      System.out.println(code + " " + message);
       if (code != HttpURLConnection.HTTP_OK) {
         return;
       }
@@ -200,7 +199,6 @@ public class App {
         int code = httpConnection.getResponseCode();
 
         String message = httpConnection.getResponseMessage();
-        System.out.println(code + " " + message);
         if (code != HttpURLConnection.HTTP_OK) {
           return;
         }
@@ -239,7 +237,6 @@ public class App {
               int code = httpConnection.getResponseCode();
 
               String message = httpConnection.getResponseMessage();
-              System.out.println(code + " " + message);
               if (code != HttpURLConnection.HTTP_OK) {
                 return;
               }
@@ -262,7 +259,6 @@ public class App {
                 System.out.println(" ["+ j +"] "+ track.get("strTrack") +" ");
               }
             } catch(ParseException e) {
-              System.out.println("Error parsing JSON");
               return;
             }
           }
@@ -270,32 +266,12 @@ public class App {
           System.out.println("Malformed URL");
           return;
         }
-
-        try {
-          URLConnection connection = u2.openConnection();
-          HttpURLConnection httpConnection = (HttpURLConnection) connection;
-          int code = httpConnection.getResponseCode();
-
-          String message = httpConnection.getResponseMessage();
-          System.out.println(code + " " + message);
-          if (code != HttpURLConnection.HTTP_OK) {
-            return;
-          }
-          InputStream instream = connection.getInputStream();
-          Scanner in = new Scanner(instream);
-          while (in.hasNextLine()) {
-            response2.append(in.nextLine());
-          }
-        } catch (IOException e) {
-          System.out.println("Error reading response");
-          return;
-        }
       } catch(ParseException e) {
-        System.out.println("Error parsing JSON");
+        System.out.println("Error parsing JSON2");
         return;
       }
     } catch(ParseException e) {
-      System.out.println("Error parsing JSON");
+      System.out.println("Error parsing JSON3");
       return;
     }
   }
@@ -360,7 +336,7 @@ public class App {
       try {
         String s6 = br.readLine();
         if (s6.equals("Y")) {
-          System.out.print("Please enter artist's name you like to search: " );
+          System.out.println("Please enter artist's name you like to search: (Please in this case only use coldplay for testing since AudioDB API only support Coldplay testing to search for songs)" );
           try {
             String s7 = br.readLine();
             searchSongs(s7);
