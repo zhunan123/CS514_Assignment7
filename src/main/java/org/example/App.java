@@ -115,10 +115,9 @@ public class App {
                 );
                 displayAllSongs();
                 System.out.println(">> Please Enter the artist's name you want to search: (Please in this case only use coldplay for testing since AudioDB API only support Coldplay testing to search for songs)");
-                //say s3 = taylor swift then we just audio DB to get response back and console the output in the terminal
-                //then user can slect songs according to artist name then you can ask to play them then add songs into playlist
-                //if user want
+                System.out.print(">> ");
                 String s3 = br.readLine();
+                System.out.println("**********Below is the song list of "+ s3 +"*********");
                 searchSongs(s3);
               }
               if (s2.equals("3")){
@@ -250,13 +249,57 @@ public class App {
               return;
             }
             try {
+              Map<Integer, String> map3 = new HashMap<>();
+              Map<Integer, String> map4 = new HashMap<>();
               JSONParser parser3 = new JSONParser();
               Object obj3 = parser3.parse(response3.toString());
               JSONObject jsonObject3 = (JSONObject) obj3;
               JSONArray tracks = (JSONArray)jsonObject3.get("track");
               for (int j = 1; j < tracks.size(); j++) {
                 JSONObject track = (JSONObject) tracks.get(j);
+                map3.put(j, String.valueOf(track.get("strTrack")));
+                map4.put(j, String.valueOf(track.get("strAlbum")));
                 System.out.println(" ["+ j +"] "+ track.get("strTrack") +" ");
+              }
+
+              System.out.println("********Which song you want to listen?**********");
+              BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+              String ans = null;
+              try {
+                System.out.print("Please enter song number: >>");
+                ans = br.readLine();
+                String track = map3.get(Integer.parseInt(ans));
+                String album = map4.get(Integer.parseInt(ans));
+                System.out.println("::::::::::::::::::::::::::::::::::");
+                System.out.println(ANSI_CYAN + "♫♪˙‿˙♫♪" + ANSI_RESET + "Lets play [ "+ track +" - "+ artistName +" ]" + ANSI_CYAN + "♫♪˙‿˙♫♪" + ANSI_RESET );
+                System.out.println(">> Do you want to add this song to your playlist? Enter Y/N");
+                System.out.print(">>");
+
+                BufferedReader br3 = new BufferedReader(new InputStreamReader(System.in));
+                String ans2 = null;
+                try {
+                  ans2 = br3.readLine();
+                  if (ans2.equals("Y")) {
+                    addSongToPlaylist(track, album, artistName);
+                    System.out.println("selected track has been successfully added to playlist, would you like to generate playlist again? Enter (Y/N)");
+                    System.out.print(">> ");
+                    BufferedReader br4 = new BufferedReader(new InputStreamReader(System.in));
+                    String ans3 = null;
+                    try {
+                      ans3 = br4.readLine();
+                      if (ans3.equals("Y")) {
+                        generatePlaylist();
+                        System.out.println("New playlist has been successfully generated!");
+                      }
+                    } catch (IOException e) {
+                      throw new RuntimeException(e);
+                    }
+                  }
+                }catch (IOException e) {
+                  throw new RuntimeException(e);
+                }
+              } catch (IOException e) {
+                throw new RuntimeException(e);
               }
             } catch(ParseException e) {
               return;
@@ -273,6 +316,20 @@ public class App {
     } catch(ParseException e) {
       System.out.println("Error parsing JSON3");
       return;
+    }
+  }
+
+  private static void addSongToPlaylist(String track, String albumname, String artistname) {
+
+    Connection connection = null;
+    try {
+      connection = DriverManager.getConnection("jdbc:sqlite:musicManager.db");
+      Statement statement = connection.createStatement();
+      ID = getPreviousTableID("songs");
+      ID++;
+      statement.executeUpdate("insert into songs (id, name, album, artist) values ("+ ID + ", '"+ track +"', '"+ albumname +"', '"+ artistname +"');");
+    } catch (SQLException e) {
+      throw new RuntimeException(e);
     }
   }
 
@@ -293,7 +350,7 @@ public class App {
       int code = httpConnection.getResponseCode();
 
       String message = httpConnection.getResponseMessage();
-      System.out.println(code + " " + message);
+      System.out.println("Search all albums is successful!");
       if (code != HttpURLConnection.HTTP_OK) {
         return;
       }
@@ -318,7 +375,7 @@ public class App {
         map.put(i, String.valueOf(album.get("strAlbum")));
         System.out.println(" ["+ i +"] "+ album.get("strAlbum") +" ");
       }
-      System.out.print(">> Please enter album number to see years created ");
+      System.out.print(">> Please enter album number to see years created: ");
       BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
       String s5 = null;
       try {
@@ -337,8 +394,11 @@ public class App {
         String s6 = br.readLine();
         if (s6.equals("Y")) {
           System.out.println("Please enter artist's name you like to search: (Please in this case only use coldplay for testing since AudioDB API only support Coldplay testing to search for songs)" );
+          System.out.print(">> ");
           try {
             String s7 = br.readLine();
+            System.out.println("**********Below is the song list of "+ s7 +"**************");
+            System.out.println("You have successfully search for "+ s7 +"'s songs");
             searchSongs(s7);
           } catch (IOException e) {
             throw new RuntimeException(e);
