@@ -161,7 +161,6 @@ public class App {
 
   public static void searchSongs(String artistName) {
     String requestURL = "https://www.theaudiodb.com/api/v1/json/2/search.php?s=";
-    String artist = artistName;
     StringBuilder response = new StringBuilder();
     URL u;
     try {
@@ -354,7 +353,6 @@ public class App {
 
   private static void searchAllAlbums(String artistName) {
     String requestURL = "https://www.theaudiodb.com/api/v1/json/2/discography.php?s=";
-    String artist = artistName;
     StringBuilder response = new StringBuilder();
     URL u;
     try {
