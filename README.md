@@ -24,3 +24,8 @@ Step 2 ----->
                 12) then finally you can re-generate the playlist again with the newest song been added to the playlist.
         If you choose to press 2, you will generate the playlist in XML files and play all the songs
         If you choose to press 3, you will be promoted to search new songs
+
+
+Notes for Maven running: Hi Professor Brooks, Maven should run just fun. I have
+installed couple dependencies like maven-site-plug, maven-project-info-reports-plugin
+it should be able to generate Java docs, run unit test and compiled a jar.

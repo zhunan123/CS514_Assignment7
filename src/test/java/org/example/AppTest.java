@@ -38,7 +38,7 @@ public class AppTest
         assertTrue( true );
     }
 
-    public void testSearchSongs() {
-        searchSongs("coldplay");
-    }
+//    public void testSearchSongs() {
+//        searchSongs("coldplay");
+//    }
 }
