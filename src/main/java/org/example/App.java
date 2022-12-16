@@ -549,7 +549,7 @@ public class App {
     }
   }
 
-  private static Integer getPreviousTableID(String tableName) {
+  public static Integer getPreviousTableID(String tableName) {
     Connection connection = null;
     String dbName = "musicManager.db";
     try {

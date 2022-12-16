@@ -4,11 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9bd3a2a2-c053-4fbc-a8de-9f47ff2a3fc4" name="Changes" comment="final code refactor and complete the step 1 to 4">
+    <list default="true" id="9bd3a2a2-c053-4fbc-a8de-9f47ff2a3fc4" name="Changes" comment="add some more unit test and final refactor">
+      <change afterPath="$PROJECT_DIR$/sqlite-jdbc-3.40.0.0.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/org/example/AlbumTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/org/example/ArtistTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/org/example/PlaylistTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/org/example/SongTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/musicManager.db" beforeDir="false" afterPath="$PROJECT_DIR$/musicManager.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/outputPlaylist.xml" beforeDir="false" afterPath="$PROJECT_DIR$/outputPlaylist.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/App.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/App.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/org/example/AppTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/org/example/AppTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -19,6 +24,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Class" />
+        <option value="JUnit3 Test Class" />
       </list>
     </option>
   </component>
@@ -36,22 +42,23 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
-    &quot;Downloaded.Files.Path.Enabled&quot;: &quot;false&quot;,
-    &quot;Repository.Attach.Annotations&quot;: &quot;false&quot;,
-    &quot;Repository.Attach.JavaDocs&quot;: &quot;false&quot;,
-    &quot;Repository.Attach.Sources&quot;: &quot;false&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary&quot;: &quot;JUnit3&quot;,
-    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit3&quot;: &quot;junit.framework.TestCase&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Libraries&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "Downloaded.Files.Path": "/Users/zhunanshuai/Desktop/USF/cs514/Assignment_7_putting_together/Assignment_7",
+    "Downloaded.Files.Path.Enabled": "true",
+    "Repository.Attach.Annotations": "false",
+    "Repository.Attach.JavaDocs": "false",
+    "Repository.Attach.Sources": "false",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary": "JUnit3",
+    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit3": "junit.framework.TestCase",
+    "project.structure.last.edited": "Libraries",
+    "project.structure.proportion": "0.093196645",
+    "project.structure.side.proportion": "0.28540063"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CreateTestDialog.Recents.Supers">
       <recent name="junit.framework.TestCase" />
@@ -60,9 +67,8 @@
       <recent name="org.example" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.App">
-    <configuration name="App" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="org.example.App" />
+  <component name="RunManager" selected="JUnit.PlaylistTest.testAddSong">
+    <configuration name="AlbumTest.testGetArtist" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="Assignment_7" />
       <extension name="coverage">
         <pattern>
@@ -70,11 +76,15 @@
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
+      <option name="PACKAGE_NAME" value="org.example" />
+      <option name="MAIN_CLASS_NAME" value="org.example.AlbumTest" />
+      <option name="METHOD_NAME" value="testGetArtist" />
+      <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="AppTest.testSearchSongs" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="AppTest.testDisplayAllAlbums" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="Assignment_7" />
       <extension name="coverage">
         <pattern>
@@ -84,7 +94,55 @@
       </extension>
       <option name="PACKAGE_NAME" value="org.example" />
       <option name="MAIN_CLASS_NAME" value="org.example.AppTest" />
-      <option name="METHOD_NAME" value="testSearchSongs" />
+      <option name="METHOD_NAME" value="testDisplayAllAlbums" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ArtistTest.testGetSongs" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="Assignment_7" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="org.example.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="org.example" />
+      <option name="MAIN_CLASS_NAME" value="org.example.ArtistTest" />
+      <option name="METHOD_NAME" value="testGetSongs" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="PlaylistTest.testAddSong" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="Assignment_7" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="org.example.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="org.example" />
+      <option name="MAIN_CLASS_NAME" value="org.example.PlaylistTest" />
+      <option name="METHOD_NAME" value="testAddSong" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="SongTest.testGetPerformer" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="Assignment_7" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="org.example.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="org.example" />
+      <option name="MAIN_CLASS_NAME" value="org.example.SongTest" />
+      <option name="METHOD_NAME" value="testGetPerformer" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -92,8 +150,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.App" />
-        <item itemvalue="JUnit.AppTest.testSearchSongs" />
+        <item itemvalue="JUnit.PlaylistTest.testAddSong" />
+        <item itemvalue="JUnit.SongTest.testGetPerformer" />
+        <item itemvalue="JUnit.ArtistTest.testGetSongs" />
+        <item itemvalue="JUnit.AlbumTest.testGetArtist" />
+        <item itemvalue="JUnit.AppTest.testDisplayAllAlbums" />
       </list>
     </recent_temporary>
   </component>
@@ -197,7 +258,28 @@
       <option name="project" value="LOCAL" />
       <updated>1671135793651</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="make maven generate doc, compile jar and auto run unit test available and add dependecies into pom.xml. also add notes into readme.">
+      <created>1671188845961</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1671188845961</updated>
+    </task>
+    <task id="LOCAL-00015" summary="delete comment">
+      <created>1671189046272</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1671189046272</updated>
+    </task>
+    <task id="LOCAL-00016" summary="delete comment">
+      <created>1671189334826</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1671189334826</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -227,6 +309,8 @@
     <MESSAGE value="add add new user searched song to the play list as well as the remote database, and allow user to generate new xml playlist" />
     <MESSAGE value="final refactor and complete the step 1 to 4" />
     <MESSAGE value="final code refactor and complete the step 1 to 4" />
-    <option name="LAST_COMMIT_MESSAGE" value="final code refactor and complete the step 1 to 4" />
+    <MESSAGE value="make maven generate doc, compile jar and auto run unit test available and add dependecies into pom.xml. also add notes into readme." />
+    <MESSAGE value="delete comment" />
+    <option name="LAST_COMMIT_MESSAGE" value="delete comment" />
   </component>
 </project>
