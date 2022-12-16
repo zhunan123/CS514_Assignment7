@@ -58,55 +58,78 @@ public class App {
         String sql =  "insert into users (id, username, password) values ("+ ID + ", '" + username + "', '"
                 + pw + "');";
         connectToDB(sql);
-      }
-      if (s.equals("1")) {
-        System.out.print(">> Please Enter Your User name: ");
-        username = br.readLine();
-        System.out.print(">> Please Enter Your Password: ");
-        pw = br.readLine();
-        System.out.println(
-                ":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::" + "\n" +
-                        "::::::::::::::" + ANSI_PURPLE + "" + username.toUpperCase() + ", " + ANSI_RESET + "Welcome Back to Music Manager::::::::::::::::::::" + "\n" +
-                        ":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::" + "\n" +
-                        ":::::>>> " + ANSI_CYAN + "Press 1 to see all the songs/albums/artists available in the song store" + ANSI_RESET + "\n" +
-                        ":::::>>> " + ANSI_GREEN + "Press 2 to generate the playlist in XML files and play all the songs" + ANSI_RESET + "\n" +
-                        ":::::>>> " + ANSI_CYAN + "Press 3 if you want to search new songs" + ANSI_RESET
-        );
-        BufferedReader br1 = new BufferedReader(new InputStreamReader(System.in));
-        System.out.print(">> ");
-        String s1 = null;
+        System.out.println("User has been successfully registered! ");
+        System.out.print("Do you want to login in now? Enter(Y/N): ");
+        String ans = null;
         try {
-          s1 = br1.readLine();
-          if (s1.equals("1")) {
-            System.out.println(":::::::::::::Below is all the songs available:::::::::::::");
-            displayAllSongs();
-            System.out.println(":::::::::::::Below is all the albums available:::::::::::::");
-            displayAllAlbums();
-            System.out.println(":::::::::::::Below is all the artists available:::::::::::::");
-            displayAllArtists();
-            System.out.println(":::::::::::::What would you like to do next? Generate all songs we have in playList? Enter(Y/N): ");
-            System.out.print("> ");
-            String s2 = br1.readLine();
-            if (s2.equals("Y")) {
-              generatePlaylist();
-            }
-            System.out.println(":::::::::::::What would you like to do next? Do you want to search for other songs? Enter(Y/N): ");
-            System.out.print("> ");
-            String s3 = br1.readLine();
-            if (s3.equals("Y")) {
-              searchSongsInGeneral();
-            }
-          }
-
-          if (s1.equals("2")) {
-            generatePlaylist();
-          }
-          if (s1.equals("3")) {
-            searchSongsInGeneral();
+          BufferedReader br5 = new BufferedReader(new InputStreamReader(System.in));
+          ans = br5.readLine();
+          if (ans.equals("Y")) {
+            existUserLoginSteps();
           }
         } catch (IOException e) {
           throw new RuntimeException(e);
         }
+      }
+      if (s.equals("1")) {
+        existUserLoginSteps();
+      }
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  public static void existUserLoginSteps() {
+    String username = null;
+    String pw = null;
+    try {
+      BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+      System.out.print(">> Please Enter Your User name: ");
+      username = br.readLine();
+      System.out.print(">> Please Enter Your Password: ");
+      pw = br.readLine();
+      System.out.println(
+              ":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::" + "\n" +
+                      "::::::::::::::" + ANSI_PURPLE + "" + username.toUpperCase() + ", " + ANSI_RESET + "Welcome Back to Music Manager::::::::::::::::::::" + "\n" +
+                      ":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::" + "\n" +
+                      ":::::>>> " + ANSI_CYAN + "Press 1 to see all the songs/albums/artists available in the song store" + ANSI_RESET + "\n" +
+                      ":::::>>> " + ANSI_GREEN + "Press 2 to generate the playlist in XML files and play all the songs" + ANSI_RESET + "\n" +
+                      ":::::>>> " + ANSI_CYAN + "Press 3 if you want to search new songs" + ANSI_RESET
+      );
+      BufferedReader br1 = new BufferedReader(new InputStreamReader(System.in));
+      System.out.print(">> ");
+      String s1 = null;
+      try {
+        s1 = br1.readLine();
+        if (s1.equals("1")) {
+          System.out.println(":::::::::::::Below is all the songs available:::::::::::::");
+          displayAllSongs();
+          System.out.println(":::::::::::::Below is all the albums available:::::::::::::");
+          displayAllAlbums();
+          System.out.println(":::::::::::::Below is all the artists available:::::::::::::");
+          displayAllArtists();
+          System.out.println(":::::::::::::What would you like to do next? Generate all songs we have in playList? Enter(Y/N): ");
+          System.out.print("> ");
+          String s2 = br1.readLine();
+          if (s2.equals("Y")) {
+            generatePlaylist();
+          }
+          System.out.println(":::::::::::::What would you like to do next? Do you want to search for other songs? Enter(Y/N): ");
+          System.out.print("> ");
+          String s3 = br1.readLine();
+          if (s3.equals("Y")) {
+            searchSongsInGeneral();
+          }
+        }
+
+        if (s1.equals("2")) {
+          generatePlaylist();
+        }
+        if (s1.equals("3")) {
+          searchSongsInGeneral();
+        }
+      } catch (IOException e) {
+        throw new RuntimeException(e);
       }
     } catch (IOException e) {
       throw new RuntimeException(e);
