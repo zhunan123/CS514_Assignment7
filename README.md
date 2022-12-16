@@ -26,6 +26,6 @@ Step 2 ----->
         If you choose to press 3, you will be promoted to search new songs
 
 
-Notes for Maven running: Hi Professor Brooks, Maven should run just fun. I have
+Notes for Maven running: Hi Professor Brooks, Maven should run just fine. I have
 installed couple dependencies like maven-site-plug, maven-project-info-reports-plugin
 it should be able to generate Java docs, run unit test and compiled a jar.
