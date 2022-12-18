@@ -1,0 +1,1 @@
+typeSearchIndex = [{"p":"org.example","l":"Album"},{"l":"All Classes and Interfaces","u":"allclasses-index.html"},{"p":"org.example","l":"App"},{"p":"org.example","l":"Artist"},{"p":"org.example","l":"Entity"},{"p":"org.example","l":"Playlist"},{"p":"org.example","l":"Song"}];updateSearchResults();
