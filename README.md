@@ -1,6 +1,6 @@
 CS514_Assignment7 instruction
 
-Step 0 -----> Please run the Main class inside the App.java.
+Step 0 -----> Please run the Main class inside the App.java. (Please click the green start icon to run App.java)
 
 Step 1 -----> you could enter either you are existed User or New User.
         1) if you enter new user, you will be asked to create username and password.
